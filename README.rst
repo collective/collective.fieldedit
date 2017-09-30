@@ -18,12 +18,7 @@ Features
 - Use the same widgets and validators as the default edit-form
 - Respects schema-hints like field-permissions, invariants and widgets.
 
-
-Use it by adding a link to a view that takes up to three parameters divided by a ":"
-
-    fieldname:fieldmode:displaylabel
-
-Schema: `fieldname:fieldmode:label`. mode and label are optional.
+Use it by adding a link to the view ``@@field_edit_form`` and pass the fiels you want to edit as a query-string with up to three parameters separated by a ":" for each field.
 
 
 Examples
@@ -45,7 +40,7 @@ Edit multiple fields:
 
 .. code-block:: html
 
-    <a href="${python:context.absolute_url()}/@@field_edit_form?fields=field1&fields=field2&fields=field3"
+    <a href="${python:context.absolute_url()}/@@field_edit_form?fields=field1&amp;fields=field2&amp;fields=field3"
         Edit some fields.
     </a>
 
@@ -53,7 +48,7 @@ Display one field, edit another"
 
 .. code-block:: html
 
-    <a href="${python:context.absolute_url()}/@@field_edit_form?fields=field1:display&fields=field2"
+    <a href="${python:context.absolute_url()}/@@field_edit_form?fields=field1:display&amp;fields=field2"
         Edit one field, display another.
     </a>
 
@@ -61,7 +56,7 @@ Hide the label:
 
 .. code-block:: html
 
-    <a href="${python:context.absolute_url()}/@@field_edit_form?fields=field1::0"
+    <a href="${python:context.absolute_url()}/@@field_edit_form?amp;fields=field1::0"
         Edit one field, display another.
     </a>
 
@@ -69,7 +64,7 @@ Add a hidden field:
 
 .. code-block:: html
 
-    <a href="${python:context.absolute_url()}/@@field_edit_form?fields=field1:hidden&fields=field2"
+    <a href="${python:context.absolute_url()}/@@field_edit_form?fields=field1:hidden&amp;fields=field2"
         Edit one field, display another.
     </a>
 
