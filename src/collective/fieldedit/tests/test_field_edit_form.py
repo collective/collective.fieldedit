@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from collective.fieldedit.testing import COLLECTIVE_FIELDEDIT_FUNCTIONAL_TESTING  # noqa: E501
-from collective.fieldedit.testing import COLLECTIVE_FIELDEDIT_INTEGRATION_TESTING  # noqa: E501
 from collective.fieldedit.field_edit_form import check_permission
 from collective.fieldedit.field_edit_form import check_write_permission
+from collective.fieldedit.testing import COLLECTIVE_FIELDEDIT_FUNCTIONAL_TESTING  # noqa: E501
+from collective.fieldedit.testing import COLLECTIVE_FIELDEDIT_INTEGRATION_TESTING  # noqa: E501
 from plone import api
 from plone.app.testing import login
 from plone.app.testing import logout
@@ -11,8 +11,8 @@ from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import SITE_OWNER_PASSWORD
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
-from plone.testing.z2 import Browser
 from plone.app.textfield.value import RichTextValue
+from plone.testing.z2 import Browser
 
 import transaction
 import unittest
@@ -283,7 +283,7 @@ class TestFieldEditFormFunctional(unittest.TestCase):
         self.browser.handleErrors = False
         self.browser.addHeader(
             'Authorization',
-            'Basic {}:{}'.format(SITE_OWNER_NAME, SITE_OWNER_PASSWORD,),
+            'Basic {0}:{1}'.format(SITE_OWNER_NAME, SITE_OWNER_PASSWORD)
         )
         login(self.portal, SITE_OWNER_NAME)
         self.doc = api.content.create(

@@ -8,15 +8,15 @@ from plone.dexterity.events import EditFinishedEvent
 from plone.dexterity.utils import iterSchemata
 from plone.supermodel.utils import mergedTaggedValueDict
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import button
 from z3c.form import interfaces
+from zope.component import queryUtility
 from zope.event import notify
 from zope.security.interfaces import IPermission
-from zope.component import queryUtility
-
 
 import logging
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -47,9 +47,7 @@ class FieldEditForm(edit.DefaultEditForm):
             self.status = self.formErrorsMessage
             return
         self.applyChanges(data)
-        IStatusMessage(self.request).addStatusMessage(
-            self.success_message, 'info',
-        )
+        api.portal.show_message(self.success_message, self.request)
         self.request.response.redirect(self.nextURL())
         notify(EditFinishedEvent(self.context))
 
