@@ -19,11 +19,11 @@ A flexible form to edit selected fields of a content type.
 Features
 --------
 
-- Nice to use In popups
+- Nice to use in modals/popups fo allow editong one ore more fields (but not all)
 - Select the field or fields you want to edit
-- You can also add fields to display or hidden
-- Use the same widgets and validators as the default edit-form
-- Respects schema-hints like field-permissions, invariants and widgets.
+- For each field you can choose between input, display and hidden.
+- Uses the same widgets and validators as the default edit-form
+- Respects schema-hints like field-permissions, invariants and widgets
 
 Use it by adding a link to the view ``@@field_edit_form`` and pass the fiels you want to edit as a query-string with up to three parameters separated by a ":" for each field.
 
@@ -33,7 +33,7 @@ Examples
 
 A link that opens the view to edit the title of this object in a modal:
 
-.. code-block:: html
+.. code-block::
 
     <a href="${python:context.absolute_url()}/field_edit_form?fields=IBasic.title"
        class="pat-plone-modal"
@@ -45,7 +45,7 @@ A link that opens the view to edit the title of this object in a modal:
 
 Edit multiple fields:
 
-.. code-block:: html
+.. code-block::
 
     <a href="${python:context.absolute_url()}/@@field_edit_form?fields=field1&amp;fields=field2&amp;fields=field3"
         Edit some fields.
@@ -53,7 +53,7 @@ Edit multiple fields:
 
 Display one field, edit another"
 
-.. code-block:: html
+.. code-block::
 
     <a href="${python:context.absolute_url()}/@@field_edit_form?fields=field1:display&amp;fields=field2"
         Edit one field, display another.
@@ -61,15 +61,15 @@ Display one field, edit another"
 
 Hide the label:
 
-.. code-block:: html
+.. code-block::
 
-    <a href="${python:context.absolute_url()}/@@field_edit_form?amp;fields=field1::0"
+    <a href="${python:context.absolute_url()}/@@field_edit_form?fields=field1::0"
         Edit one field, display another.
     </a>
 
 Add a hidden field:
 
-.. code-block:: html
+.. code-block::
 
     <a href="${python:context.absolute_url()}/@@field_edit_form?fields=field1:hidden&amp;fields=field2"
         Edit one field, display another.
