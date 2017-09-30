@@ -9,7 +9,7 @@ python:
 matrix:
   fast_finish: true
 install:
-  - bin/pip install -r requirements.txt
+  - pip install -r requirements.txt
   - bin/buildout -N buildout:download-cache=downloads code-analysis:return-status-codes=True annotate
   - bin/buildout -N buildout:download-cache=downloads code-analysis:return-status-codes=True
 before_script:
