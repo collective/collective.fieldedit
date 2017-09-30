@@ -1,0 +1,39 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="collective.fieldedit">
+
+  <genericsetup:registerProfile
+      name="default"
+      title="collective.fieldedit"
+      directory="profiles/default"
+      description="Installs the collective.fieldedit add-on."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      post_handler=".setuphandlers.post_install"
+      />
+
+  <genericsetup:registerProfile
+      name="uninstall"
+      title="collective.fieldedit (uninstall)"
+      directory="profiles/uninstall"
+      description="Uninstalls the collective.fieldedit add-on."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      post_handler=".setuphandlers.uninstall"
+      />
+
+  <utility
+      factory=".setuphandlers.HiddenProfiles"
+      name="collective.fieldedit-hiddenprofiles" />
+
+  <browser:page
+      name="field_edit_form"
+      for="*"
+      template="field_edit_form.pt"
+      class=".field_edit_form.FieldEditForm"
+      layer="collective.fieldedit.interfaces.ICollectiveFieldeditLayer"
+      permission="cmf.ModifyPortalContent"
+      />
+
+</configure>
