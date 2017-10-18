@@ -13,17 +13,18 @@
 collective.fieldedit
 ====================
 
-A flexible form to edit selected fields of a content type.
+A view to edit selected fields of a content type.
 
 
 Features
 --------
 
-- Nice to use in modals/popups fo allow editong one ore more fields (but not all)
+- Useable by simply calling a view with a the fields you want to edit as query-string-parameters
 - Select the field or fields you want to edit
-- For each field you can choose between input, display and hidden.
+- For each field you can choose between input, display and hidden
 - Uses the same widgets and validators as the default edit-form
 - Respects schema-hints like field-permissions, invariants and widgets
+- Nice to use in modals/popups fo allow editing one ore more fields (but not all)
 
 Use it by adding a link to the view ``@@field_edit_form`` and pass the fiels you want to edit as a query-string with up to three parameters separated by a ":" for each field.
 
@@ -31,7 +32,19 @@ Use it by adding a link to the view ``@@field_edit_form`` and pass the fiels you
 Examples
 --------
 
-A link that opens the view to edit the title of this object in a modal:
+Edit the text of a document::
+
+    http://localhost:8080/Plone/front-page/@@field_edit_form?fields=IRichText.text
+
+Edit the fields title and subjects::
+
+    http://localhost:8080/Plone/front-page/@@field_edit_form?fields=IDublinCore.subjects&fields=IDublinCore.title
+
+Display the text and edit the publishing date::
+
+    http://localhost:8080/Plone/front-page/@@field_edit_form?fields=IRichText.text:display:0&fields=IRelatedItems.relatedItems
+
+Render a link to edit the title in a modal:
 
 .. code-block::
 
@@ -75,20 +88,13 @@ Add a hidden field:
         Edit one field, display another.
     </a>
 
-Behavior-fields need to be prefixed with the Bahavior:
+Behavior-fields need to be prefixed with the Behavior:
 
 .. code-block::
 
     <a href="${python:context.absolute_url()}/@@field_edit_form?fields=IBasic.title"
         Edit one field, display another.
     </a>
-
-
-Documentation
--------------
-
-TODO
-
 
 
 Installation
