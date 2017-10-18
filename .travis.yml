@@ -10,11 +10,7 @@ python:
 matrix:
   fast_finish: true
 install:
-  - which virtualenv
-  - virtualenv --version
-  - which python
-  - python --version
-  - virtualenv .
+  - virtualenv -p `which python` .
   - bin/python --version
   - bin/pip install -r requirements.txt
   - bin/buildout -N buildout:download-cache=downloads code-analysis:return-status-codes=True annotate
