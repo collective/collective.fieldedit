@@ -5,7 +5,7 @@
       i18n:domain="plone"
       metal:use-macro="context/main_template/macros/master">
 
-  <metal:block fill-slot="content-core">
+  <metal:block fill-slot="main">
 
     <form action="${context/absolute_url}/@@field_edit_form"
           method="post"
