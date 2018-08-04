@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.0a2 (unreleased)
+1.0a2 (2018-08-04)
 ------------------
 
 - Fix redirect and remaining webdav locks on cancel (#1)
