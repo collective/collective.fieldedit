@@ -4,14 +4,12 @@ from plone import api
 from plone.autoform.interfaces import READ_PERMISSIONS_KEY
 from plone.autoform.interfaces import WRITE_PERMISSIONS_KEY
 from plone.dexterity.browser import edit
-from plone.dexterity.events import EditFinishedEvent
 from plone.dexterity.utils import iterSchemata
 from plone.supermodel.utils import mergedTaggedValueDict
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
 from z3c.form import interfaces
 from zope.component import queryUtility
-from zope.event import notify
 from zope.security.interfaces import IPermission
 
 import logging
@@ -42,14 +40,11 @@ class FieldEditForm(edit.DefaultEditForm):
         self.set_widgets_mode(field_ids, interfaces.INPUT_MODE)
 
         # the rest is the original code
-        data, errors = self.extractData()
-        if errors:
-            self.status = self.formErrorsMessage
-            return
-        self.applyChanges(data)
-        api.portal.show_message(self.success_message, self.request)
-        self.request.response.redirect(self.nextURL())
-        notify(EditFinishedEvent(self.context))
+        super(FieldEditForm, self).handleApply(self, action)
+
+    @button.buttonAndHandler(_(u'Cancel'), name='cancel')
+    def handleCancel(self, action):
+        super(FieldEditForm, self).handleCancel(self, action)
 
     def fields_info(self, fields=None):
         """Get info about the fields and their modes from the query-string.

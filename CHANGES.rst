@@ -5,7 +5,8 @@ Changelog
 1.0a2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix redirent and remaining webdav locks on cancel (#1)
+  [pbauer]
 
 
 1.0a1 (2017-10-10)
