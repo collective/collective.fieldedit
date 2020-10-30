@@ -37,8 +37,8 @@ class TestFieldEditForm(unittest.TestCase):
     def test_get_widget_markup(self):
         view = api.content.get_view('field_edit_form', self.doc, self.request)
         view.update()
-        html = view.get_widget(fieldname='IRichText.text')
-        self.assertIn(' name="form.widgets.IRichText.text"', html)
+        html = view.get_widget(fieldname='IRichTextBehavior.text')
+        self.assertIn(' name="form.widgets.IRichTextBehavior.text"', html)
 
     def test_get_widget_markup_display(self):
         view = api.content.get_view('field_edit_form', self.doc, self.request)
@@ -153,7 +153,7 @@ class TestFieldEditForm(unittest.TestCase):
         self.assertIn(' for="form-widgets-IShortName-id"', html)
         self.assertIn(' for="form-widgets-IDublinCore-subjects"', html)
         self.assertNotIn('<span id="form-widgets-IShortName-id" class="text-widget asciiline-field">welcome_page</span>', html)  # noqa: E501
-        self.assertNotIn('<span id="form-widgets-IDublinCore-subjects" class="text-widget tuple-field"></span>', html)  # noqa: E501
+        self.assertNotIn('<span id="form-widgets-IDublinCore-subjects" class="text-widget tuple-field">', html)  # noqa: E501
         self.assertIn('welcome_page/@@field_edit_form', html)
 
         self.request['fields'] = [
@@ -168,7 +168,7 @@ class TestFieldEditForm(unittest.TestCase):
         self.assertNotIn(' for="form-widgets-IShortName-id"', html)
         self.assertNotIn(' for="form-widgets-IDublinCore-subjects"', html)
         self.assertNotIn('<span id="form-widgets-IShortName-id" class="text-widget asciiline-field">welcome_page</span>', html)  # noqa: E501
-        self.assertNotIn('<span id="form-widgets-IDublinCore-subjects" class="text-widget tuple-field"></span>', html)  # noqa: E501
+        self.assertNotIn('<span id="form-widgets-IDublinCore-subjects" class="text-widget tuple-field">', html)  # noqa: E501
 
         self.request['fields'] = [
             'IShortName.id:display:false',
@@ -182,7 +182,7 @@ class TestFieldEditForm(unittest.TestCase):
         self.assertNotIn(' for="form-widgets-IShortName-id"', html)
         self.assertNotIn(' for="form-widgets-IDublinCore-subjects"', html)
         self.assertIn('<span id="form-widgets-IShortName-id" class="text-widget asciiline-field">welcome_page</span>', html)  # noqa: E501
-        self.assertIn('<span id="form-widgets-IDublinCore-subjects" class="text-widget tuple-field"></span>', html)  # noqa: E501
+        self.assertIn('<span id="form-widgets-IDublinCore-subjects" class="text-widget tuple-field">', html)  # noqa: E501
 
         self.request['fields'] = ['nofield']
         view = api.content.get_view('field_edit_form', self.doc, self.request)
@@ -298,23 +298,23 @@ class TestFieldEditFormFunctional(unittest.TestCase):
     def test_render_form(self):
         doc_url = self.doc.absolute_url()
         self.doc.subject = (u'Krazy Keyword',)
-        self.browser.open(doc_url + '/@@field_edit_form?fields=IDublinCore.title&fields=IRichText.text&autofocus=True')  # noqa: E501
+        self.browser.open(doc_url + '/@@field_edit_form?fields=IDublinCore.title&fields=IRichTextBehavior.text&autofocus=True')  # noqa: E501
         self.assertEqual(
             self.browser.getControl(name='form.widgets.IDublinCore.title').value,  # noqa: E501
             'Willkommen',
         )
         self.browser.getControl(name='form.widgets.IDublinCore.title').value = 'Was ist das?'  # noqa: E501
-        self.browser.getControl(name='form.widgets.IRichText.text').value = '<p>Warum?</p>'  # noqa: E501
+        self.browser.getControl(name='form.widgets.IRichTextBehavior.text').value = '<p>Warum?</p>'  # noqa: E501
         self.browser.getControl(name='form.buttons.save').click()
         self.assertEqual(self.doc.title, u'Was ist das?')
         self.assertEqual(self.doc.text.output, u'<p>Warum?</p>')
 
-        self.browser.open(doc_url + '/@@field_edit_form?fields=IRichText.text:display&fields=IDublinCore.description')  # noqa: E501
+        self.browser.open(doc_url + '/@@field_edit_form?fields=IRichTextBehavior.text:display&fields=IDublinCore.description')  # noqa: E501
         with self.assertRaises(LookupError):
-            self.browser.getControl(name='form.widgets.IRichText.text')
+            self.browser.getControl(name='form.widgets.IRichTextBehavior.text')
         self.assertIn('<p>Warum?', self.browser.contents)
         self.assertIn(
-            'data-fieldname="form.widgets.IRichText.text"',
+            'data-fieldname="form.widgets.IRichTextBehavior.text"',
             self.browser.contents)
 
         qs = '?fields=ITableOfContents.table_of_contents:hidden&fields=IDublinCore.subjects:input'  # noqa: E501
@@ -329,13 +329,13 @@ class TestFieldEditFormFunctional(unittest.TestCase):
     def test_render_form_with_validationerror(self):
         doc_url = self.doc.absolute_url()
         self.doc.subject = (u'Krazy Keyword',)
-        self.browser.open(doc_url + '/@@field_edit_form?fields=IDublinCore.title&fields=IRichText.text')  # noqa: E501
+        self.browser.open(doc_url + '/@@field_edit_form?fields=IDublinCore.title&fields=IRichTextBehavior.text')  # noqa: E501
         self.assertEqual(
             self.browser.getControl(name='form.widgets.IDublinCore.title').value,  # noqa: E501
             'Willkommen',
         )
         self.browser.getControl(name='form.widgets.IDublinCore.title').value = ''  # noqa: E501
-        self.browser.getControl(name='form.widgets.IRichText.text').value = '<p>Warum?</p>'  # noqa: E501
+        self.browser.getControl(name='form.widgets.IRichTextBehavior.text').value = '<p>Warum?</p>'  # noqa: E501
         self.browser.getControl(name='form.buttons.save').click()
         self.assertIn('<div class="error">Required input is missing.</div>', self.browser.contents)  # noqa: E501
         self.assertEqual(self.browser.url, 'http://nohost/plone/welcome_page/@@field_edit_form')  # noqa: E501

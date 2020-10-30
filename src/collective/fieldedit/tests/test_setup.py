@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """Setup tests for this package."""
-from plone import api
 from collective.fieldedit.testing import COLLECTIVE_FIELDEDIT_INTEGRATION_TESTING  # noqa
+from plone import api
+from Products.CMFPlone.utils import get_installer
 
 import unittest
 
@@ -14,11 +15,11 @@ class TestSetup(unittest.TestCase):
     def setUp(self):
         """Custom shared utility setup for tests."""
         self.portal = self.layer['portal']
-        self.installer = api.portal.get_tool('portal_quickinstaller')
+        self.installer = get_installer(self.portal, self.layer['request'])
 
     def test_product_installed(self):
         """Test if collective.fieldedit is installed."""
-        self.assertTrue(self.installer.isProductInstalled(
+        self.assertTrue(self.installer.is_product_installed(
             'collective.fieldedit'))
 
     def test_browserlayer(self):
@@ -37,12 +38,12 @@ class TestUninstall(unittest.TestCase):
 
     def setUp(self):
         self.portal = self.layer['portal']
-        self.installer = api.portal.get_tool('portal_quickinstaller')
-        self.installer.uninstallProducts(['collective.fieldedit'])
+        self.installer = get_installer(self.portal, self.layer['request'])
+        self.installer.uninstall_product('collective.fieldedit')
 
     def test_product_uninstalled(self):
         """Test if collective.fieldedit is cleanly uninstalled."""
-        self.assertFalse(self.installer.isProductInstalled(
+        self.assertFalse(self.installer.is_product_installed(
             'collective.fieldedit'))
 
     def test_browserlayer_removed(self):

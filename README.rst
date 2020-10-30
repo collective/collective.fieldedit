@@ -34,7 +34,7 @@ Examples
 
 Edit the text of a document::
 
-    http://localhost:8080/Plone/front-page/@@field_edit_form?fields=IRichText.text
+    http://localhost:8080/Plone/front-page/@@field_edit_form?fields=IRichTextBehavior.text
 
 Edit the fields title and subjects::
 
@@ -42,7 +42,7 @@ Edit the fields title and subjects::
 
 Display the text and edit the publishing date::
 
-    http://localhost:8080/Plone/front-page/@@field_edit_form?fields=IRichText.text:display:0&fields=IRelatedItems.relatedItems
+    http://localhost:8080/Plone/front-page/@@field_edit_form?fields=IRichTextBehavior.text:display:0&fields=IRelatedItems.relatedItems
 
 Render a link to edit the title in a modal:
 
