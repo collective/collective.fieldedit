@@ -48,7 +48,7 @@
       </tal:fields>
 
       <div class="formControls">
-        <button type="button" id="form-buttons-save" name="form.buttons.save" class="btn submit-widget button-field context btn-primary" value="Save" i18n:translate="">Save</button>
+        <button type="button" id="form-buttons-save" name="form.buttons.save" class="btn submit-widget button-field context btn-primary" value="Save" i18n:translate="" tal:condition="python: can_save is True">Save</button>
         <button type="button" id="form-buttons-cancel" name="form.buttons.cancel" class="btn btn-secondary submit-widget button-field standalone" value="Cancel" formnovalidate="True" i18n:translate="">Cancel</button>
       </div>
 
