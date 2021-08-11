@@ -23,9 +23,10 @@ class CollectiveFieldeditLayer(PloneSandboxLayer):
         self.loadZCML(package=collective.fieldedit)
 
     def setUpPloneSite(self, portal):
-        applyProfile(portal, 'collective.fieldedit:default')
+        applyProfile(portal, "collective.fieldedit:default")
         portal.acl_users.userFolderAddUser(
-            SITE_OWNER_NAME, SITE_OWNER_PASSWORD, ['Manager'], [])
+            SITE_OWNER_NAME, SITE_OWNER_PASSWORD, ["Manager"], []
+        )
 
 
 COLLECTIVE_FIELDEDIT_FIXTURE = CollectiveFieldeditLayer()
@@ -33,13 +34,13 @@ COLLECTIVE_FIELDEDIT_FIXTURE = CollectiveFieldeditLayer()
 
 COLLECTIVE_FIELDEDIT_INTEGRATION_TESTING = IntegrationTesting(
     bases=(COLLECTIVE_FIELDEDIT_FIXTURE,),
-    name='CollectiveFieldeditLayer:IntegrationTesting'
+    name="CollectiveFieldeditLayer:IntegrationTesting",
 )
 
 
 COLLECTIVE_FIELDEDIT_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(COLLECTIVE_FIELDEDIT_FIXTURE,),
-    name='CollectiveFieldeditLayer:FunctionalTesting'
+    name="CollectiveFieldeditLayer:FunctionalTesting",
 )
 
 
@@ -47,7 +48,7 @@ COLLECTIVE_FIELDEDIT_ACCEPTANCE_TESTING = FunctionalTesting(
     bases=(
         COLLECTIVE_FIELDEDIT_FIXTURE,
         REMOTE_LIBRARY_BUNDLE_FIXTURE,
-        z2.ZSERVER_FIXTURE
+        z2.ZSERVER_FIXTURE,
     ),
-    name='CollectiveFieldeditLayer:AcceptanceTesting'
+    name="CollectiveFieldeditLayer:AcceptanceTesting",
 )

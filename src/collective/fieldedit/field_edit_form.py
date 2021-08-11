@@ -25,14 +25,14 @@ class FieldEditForm(edit.DefaultEditForm):
     Has working inline-validation and such :-)
     """
 
-    template = ViewPageTemplateFile('field_edit_form.pt')
+    template = ViewPageTemplateFile("field_edit_form.pt")
 
-    @button.buttonAndHandler(_(u'Save'), name='save')
+    @button.buttonAndHandler(_(u"Save"), name="save")
     def handleApply(self, action):  # noqa
         # override widget modes to ignore all other fields
-        prefix = 'form.widgets.'
+        prefix = "form.widgets."
         field_ids = [k.split(prefix)[-1] for k in self.request.form.keys()]
-        self.request.set('fields', field_ids)
+        self.request.set("fields", field_ids)
         # set all widgets to display to prevent saving data
         self.set_all_widgets_mode(interfaces.DISPLAY_MODE)
 
@@ -42,7 +42,7 @@ class FieldEditForm(edit.DefaultEditForm):
         # the rest is the original code
         super(FieldEditForm, self).handleApply(self, action)
 
-    @button.buttonAndHandler(_(u'Cancel'), name='cancel')
+    @button.buttonAndHandler(_(u"Cancel"), name="cancel")
     def handleCancel(self, action):
         super(FieldEditForm, self).handleCancel(self, action)
 
@@ -75,37 +75,54 @@ class FieldEditForm(edit.DefaultEditForm):
             fieldmode = interfaces.INPUT_MODE
             label = True
             mode = None
-            if ':' in fieldname:
-                values = fieldname.split(':')
+            if ":" in fieldname:
+                values = fieldname.split(":")
                 if len(values) == 2:
                     fieldname, mode = values
                 elif len(values) == 3:
                     fieldname, mode, label = values
-                    if label.lower() in ['0', 'false', 'no']:
+                    if label.lower() in ["0", "false", "no"]:
                         label = False
-            if mode and mode in [interfaces.INPUT_MODE, interfaces.DISPLAY_MODE, interfaces.HIDDEN_MODE]:  # noqa
+            if mode and mode in [
+                interfaces.INPUT_MODE,
+                interfaces.DISPLAY_MODE,
+                interfaces.HIDDEN_MODE,
+            ]:  # noqa
                 fieldmode = str(mode)
-            results.append({
-                'fieldname': fieldname,
-                'fieldmode': fieldmode,
-                'label': label,
-            })
+            results.append(
+                {
+                    "fieldname": fieldname,
+                    "fieldmode": fieldmode,
+                    "label": label,
+                }
+            )
         return results
 
-    def get_widget(self, fieldname=None, fieldmode=None, label=True, autofocus=False):  # noqa
-        fieldname = fieldname or self.request.get('fieldname')
-        fieldmode = fieldmode or self.request.get('fieldmode') or interfaces.INPUT_MODE  # noqa
-        label = label or self.request.get('label')
+    def get_widget(
+        self, fieldname=None, fieldmode=None, label=True, autofocus=False
+    ):  # noqa
+        fieldname = fieldname or self.request.get("fieldname")
+        fieldmode = (
+            fieldmode or self.request.get("fieldmode") or interfaces.INPUT_MODE
+        )  # noqa
+        label = label or self.request.get("label")
         if not fieldname:
             return
         widget = self.find_widget(fieldname)
         if widget:
-            if fieldmode == interfaces.DISPLAY_MODE \
-                    and not check_read_permission(self.context, fieldname):
+            if fieldmode == interfaces.DISPLAY_MODE and not check_read_permission(
+                self.context, fieldname
+            ):
                 # skip if display-mode and cannot view
                 return
-            if fieldmode in [interfaces.INPUT_MODE, interfaces.HIDDEN_MODE] \
-                    and not check_write_permission(self.context, fieldname):
+            if (
+                fieldmode
+                in [
+                    interfaces.INPUT_MODE,
+                    interfaces.HIDDEN_MODE,
+                ]
+                and not check_write_permission(self.context, fieldname)
+            ):
                 # skip if edit- or hidden-mode and cannot write
                 return
             widget.mode = fieldmode
@@ -115,33 +132,37 @@ class FieldEditForm(edit.DefaultEditForm):
                 widget_view = widget.render
             else:
                 widget_view = api.content.get_view(
-                    'ploneform-render-widget', widget, self.request)
+                    "ploneform-render-widget", widget, self.request
+                )
             # apply autofocus attribute
             if autofocus and fieldclass:
                 field_hooks = {
-                    'textline-field': 'type=\"text\"',
-                    'list-field': 'type=\"text\"',
-                    'richtext-field': 'textarea',
+                    "textline-field": 'type="text"',
+                    "list-field": 'type="text"',
+                    "richtext-field": "textarea",
                 }
                 for key in field_hooks.keys():
                     if key in fieldclass:
                         hook = field_hooks[key]
                         widget_view = widget_view()
-                        widget_view = widget_view.replace(hook, hook + ' autofocus=\"\"', 1)  # noqa
+                        widget_view = widget_view.replace(
+                            hook, hook + ' autofocus=""', 1
+                        )  # noqa
                         return widget_view
             return widget_view()
 
     def set_all_widgets_mode(self, mode):
         for widget in self.widgets.values():
             widget.mode = mode
-        group_widgets = [widget for group in self.groups for widget
-                         in group.widgets.values()]
+        group_widgets = [
+            widget for group in self.groups for widget in group.widgets.values()
+        ]
         for widget in group_widgets:
             widget.mode = mode
 
     def set_widgets_mode(self, field_ids, mode):
         for field_id in field_ids:
-            widget = self.find_widget(field_id.replace('-empty-marker', ''))
+            widget = self.find_widget(field_id.replace("-empty-marker", ""))
             if widget:
                 widget.mode = mode
 
@@ -172,9 +193,8 @@ def check_read_permission(obj, field_id):
 
 
 def taggedvalue_for_field(obj, field_id, key):
-    """Get tagged value for a field by value-key.
-    """
-    field_id = field_id.split('.')[-1]
+    """Get tagged value for a field by value-key."""
+    field_id = field_id.split(".")[-1]
     for schema in iterSchemata(obj):
         taggedvalues = mergedTaggedValueDict(schema, key)
         taggedvalue = taggedvalues.get(field_id)
@@ -183,10 +203,8 @@ def taggedvalue_for_field(obj, field_id, key):
 
 
 def check_permission(permission_id, obj=None):
-    """Turn a permission-id into a permission and check for it.
-    """
+    """Turn a permission-id into a permission and check for it."""
     permission = queryUtility(IPermission, name=permission_id)
     if permission:
         return api.user.has_permission(permission.title, obj=obj)
-    else:
-        logger.info('Permission {0} not found!'.format(permission_id))
+    logger.info("Permission {0} not found!".format(permission_id))
