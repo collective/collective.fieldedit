@@ -5,6 +5,8 @@ Changelog
 1.0a3 (unreleased)
 ------------------
 
+- Additional Markup for Plone 6.0 (Bootstrap 5) [jensens]
+
 - Formatted with Black/isort according to Plone standards.
   [jensens]
 

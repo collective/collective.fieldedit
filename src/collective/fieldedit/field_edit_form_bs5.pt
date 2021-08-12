@@ -1,0 +1,69 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      i18n:domain="plone"
+      metal:use-macro="context/main_template/macros/master">
+
+  <metal:block fill-slot="main">
+
+    <form action="${context/absolute_url}/@@field_edit_form"
+          method="post"
+          class="rowlike"
+          tal:define="fields python:request.get('fields', None);
+                      field_info python:view.fields_info(fields);
+                      autofocus python:request.get('autofocus', False);
+                      can_save python:request.get('can_save', True)">
+
+      <tal:status define="status view/status;
+                          has_error python:view.widgets.errors or status == getattr(view, 'formErrorsMessage', None)" condition="status">
+          <dl class="portalMessage error" tal:condition="has_error" i18n:domain="plone">
+              <dt i18n:translate="">
+                  Error
+              </dt>
+              <dd tal:content="status" />
+          </dl>
+      </tal:status>
+
+      <tal:errors define="errors view/widgets/errors" condition="errors">
+          <tal:error repeat="error errors">
+              <div class="field error"
+                   tal:condition="not:nocall:error/widget"
+                   tal:content="structure error/render">
+                   Error
+              </div>
+          </tal:error>
+      </tal:errors>
+
+      <tal:fields tal:condition="field_info"
+                  tal:repeat="field field_info">
+
+        <tal:field 
+             tal:define="fieldname python:field['fieldname'];
+                         fieldmode python:field['fieldmode'];
+                         label python:field['label']"
+             tal:condition="fieldname">
+          <div tal:replace="structure python:view.get_widget(fieldname=fieldname, fieldmode=fieldmode, label=label, autofocus=autofocus)"></div>
+        </tal:field>
+
+      </tal:fields>
+
+      <div class="formControls">
+        <button type="submit" class="btn btn-primary" name="form.buttons.save" value="Save" i18n:translate="" tal:condition="python: can_save is True">Save</button>
+        <button type="submit" class="btn btn-secondary" name="form.buttons.cancel" value="Cancel" i18n:translate="">Cancel</button>
+      </div>
+
+      <script type="text/javascript" tal:condition="autofocus">
+        var fields = '#form-widgets-${fields}';
+        $(document).ready(function(e) {
+          setTimeout(function() {
+            $(fields).focus();
+          }, 250);
+        });
+      </script>
+
+    </form>
+
+  </metal:block>
+
+</html>

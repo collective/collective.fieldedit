@@ -9,7 +9,6 @@ setup(
     name="collective.fieldedit",
     version="1.0a3.dev0",
     description="A flexible form to edit selected fields of a content type.",
-    long_description=long_description,
     # Get more from https://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
         "Environment :: Web Environment",

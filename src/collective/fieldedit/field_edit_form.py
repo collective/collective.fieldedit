@@ -14,6 +14,12 @@ from zope.security.interfaces import IPermission
 
 import logging
 
+try:
+    from Products.CMFPlone.factory import PLONE60MARKER
+    TEMPLATE = "field_edit_form_bs5.pt"
+except ImportError:
+    TEMPLATE = "field_edit_form.pt"
+
 
 logger = logging.getLogger(__name__)
 
@@ -25,11 +31,12 @@ class FieldEditForm(edit.DefaultEditForm):
     Has working inline-validation and such :-)
     """
 
-    template = ViewPageTemplateFile("field_edit_form.pt")
+    template = ViewPageTemplateFile(TEMPLATE)
 
     @button.buttonAndHandler(_(u"Save"), name="save")
     def handleApply(self, action):  # noqa
         # override widget modes to ignore all other fields
+        breakpoint()
         prefix = "form.widgets."
         field_ids = [k.split(prefix)[-1] for k in self.request.form.keys()]
         self.request.set("fields", field_ids)
@@ -73,7 +80,7 @@ class FieldEditForm(edit.DefaultEditForm):
                 sorted_fields.append(fieldname)
         for fieldname in sorted_fields:
             fieldmode = interfaces.INPUT_MODE
-            label = True
+            show_label = True
             mode = None
             if ":" in fieldname:
                 values = fieldname.split(":")
@@ -81,30 +88,28 @@ class FieldEditForm(edit.DefaultEditForm):
                     fieldname, mode = values
                 elif len(values) == 3:
                     fieldname, mode, label = values
-                    if label.lower() in ["0", "false", "no"]:
-                        label = False
-            if mode and mode in [
-                interfaces.INPUT_MODE,
+                    show_label = label.lower() not in ["0", "false", "no"]
+            if mode in [
                 interfaces.DISPLAY_MODE,
                 interfaces.HIDDEN_MODE,
-            ]:  # noqa
+            ]:
                 fieldmode = str(mode)
             results.append(
                 {
                     "fieldname": fieldname,
                     "fieldmode": fieldmode,
-                    "label": label,
+                    "label": show_label,
                 }
             )
         return results
 
     def get_widget(
         self, fieldname=None, fieldmode=None, label=True, autofocus=False
-    ):  # noqa
+    ):  
         fieldname = fieldname or self.request.get("fieldname")
         fieldmode = (
             fieldmode or self.request.get("fieldmode") or interfaces.INPUT_MODE
-        )  # noqa
+        )
         label = label or self.request.get("label")
         if not fieldname:
             return
