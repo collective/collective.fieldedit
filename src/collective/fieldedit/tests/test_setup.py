@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 """Setup tests for this package."""
-from collective.fieldedit.testing import (  # noqa
-    COLLECTIVE_FIELDEDIT_INTEGRATION_TESTING,
-)
-from plone import api
+from collective.fieldedit.testing import COLLECTIVE_FIELDEDIT_INTEGRATION_TESTING
 from Products.CMFPlone.utils import get_installer
 
 import unittest

@@ -14,8 +14,10 @@ from zope.security.interfaces import IPermission
 
 import logging
 
+
 try:
-    from Products.CMFPlone.factory import PLONE60MARKER
+    from Products.CMFPlone.factory import PLONE60MARKER  # noqa: F401
+
     TEMPLATE = "field_edit_form_bs5.pt"
 except ImportError:
     TEMPLATE = "field_edit_form.pt"
@@ -36,7 +38,6 @@ class FieldEditForm(edit.DefaultEditForm):
     @button.buttonAndHandler(_(u"Save"), name="save")
     def handleApply(self, action):  # noqa
         # override widget modes to ignore all other fields
-        breakpoint()
         prefix = "form.widgets."
         field_ids = [k.split(prefix)[-1] for k in self.request.form.keys()]
         self.request.set("fields", field_ids)
@@ -103,13 +104,9 @@ class FieldEditForm(edit.DefaultEditForm):
             )
         return results
 
-    def get_widget(
-        self, fieldname=None, fieldmode=None, label=True, autofocus=False
-    ):  
+    def get_widget(self, fieldname=None, fieldmode=None, label=True, autofocus=False):
         fieldname = fieldname or self.request.get("fieldname")
-        fieldmode = (
-            fieldmode or self.request.get("fieldmode") or interfaces.INPUT_MODE
-        )
+        fieldmode = fieldmode or self.request.get("fieldmode") or interfaces.INPUT_MODE
         label = label or self.request.get("label")
         if not fieldname:
             return

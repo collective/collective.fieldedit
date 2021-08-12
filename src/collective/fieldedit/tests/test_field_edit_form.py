@@ -4,9 +4,7 @@ from collective.fieldedit.field_edit_form import check_write_permission
 from collective.fieldedit.testing import (  # noqa: E501
     COLLECTIVE_FIELDEDIT_FUNCTIONAL_TESTING,
 )
-from collective.fieldedit.testing import (  # noqa: E501
-    COLLECTIVE_FIELDEDIT_INTEGRATION_TESTING,
-)
+from collective.fieldedit.testing import COLLECTIVE_FIELDEDIT_INTEGRATION_TESTING
 from plone import api
 from plone.app.testing import login
 from plone.app.testing import logout
