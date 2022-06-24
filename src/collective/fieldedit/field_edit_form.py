@@ -76,7 +76,7 @@ class FieldEditForm(edit.DefaultEditForm):
         # Make sure we use the order from the schema
         # This is needed to keep the order during validation-errors
         sorted_fields = []
-        for fieldname in self.fields.keys() + fields:
+        for fieldname in list(self.fields.keys()) + fields:
             if fieldname not in sorted_fields and fieldname in fields:
                 sorted_fields.append(fieldname)
         for fieldname in sorted_fields:

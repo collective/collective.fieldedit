@@ -100,14 +100,14 @@ class TestFieldEditForm(unittest.TestCase):
         view.update()
         html = view.render()
         self.assertIn(' name="form.widgets.IDublinCore.effective"', html)
-        self.assertNotIn('<div class="error">Required input is missing.</div>', html)
+        self.assertNotIn('>Required input is missing.<', html)
         view.request.form["form.widgets.IDublinCore.effective"] = u"unexpected"
         view.handleApply(view, None)
         self.assertEqual(view.status, u"There were some errors.")
         html = view.render()
         self.assertIn(' name="form.widgets.IDublinCore.effective"', html)
         self.assertIn(
-            '<div class="error">The system could not process the given value.</div>',
+            '>The system could not process the given value.<',
             html,
         )  # noqa: E501
 
@@ -119,7 +119,7 @@ class TestFieldEditForm(unittest.TestCase):
         view.handleApply(view, None)
         self.assertEqual(view.status, u"There were some errors.")
         html = view.render()
-        self.assertIn('<div class="error">Required input is missing.</div>', html)
+        self.assertIn('>Required input is missing.<', html)
 
     def test_multifield_edit_form_submit(self):
         self.assertEqual(self.doc.title, u"Willkommen")
@@ -225,24 +225,21 @@ class TestDecisionFieldEditForm(unittest.TestCase):
         from plone.autoform.interfaces import READ_PERMISSIONS_KEY
         from plone.autoform.interfaces import WRITE_PERMISSIONS_KEY
         from plone.dexterity.schema import SCHEMA_CACHE
-
-        # Crazy trick to use the xml-based schema in tests.
-        # In a life-instance the name would be <name_of_instance>_0_File!
-        from plone.dexterity.schema.generated import plone_0_File
         from plone.namedfile import NamedBlobFile
 
-        plone_0_File.setTaggedValue(
+        file_schema = SCHEMA_CACHE.get("File")
+
+        file_schema.setTaggedValue(
             WRITE_PERMISSIONS_KEY,
             {
                 "title": u"cmf.ReviewPortalContent",
                 "file": u"cmf.ManagePortal",
             },
         )
-        plone_0_File.setTaggedValue(
+        file_schema.setTaggedValue(
             READ_PERMISSIONS_KEY, {"file": u"cmf.ReviewPortalContent"}
         )
 
-        SCHEMA_CACHE.clear()  # probably not needed.
         item = api.content.create(
             container=self.portal,
             type="File",
@@ -277,15 +274,15 @@ class TestDecisionFieldEditForm(unittest.TestCase):
         view = api.content.get_view("field_edit_form", item, self.request)
         html = view()
         self.assertIn(
-            u'<input id="form-widgets-title" name="form.widgets.title" class="text-widget textline-field" value="I have a secret file!" type="text" />',
+            u'value="I have a secret file!" type="text" />',
             html,
         )  # noqa: E501
         self.assertIn(
-            u'<textarea id="form-widgets-description" name="form.widgets.description" class="textarea-widget text-field">The description</textarea>',
+            u'>The description</textarea>',
             html,
         )  # noqa: E501
         self.assertIn(
-            '<input type="file" id="form-widgets-file-input" name="form.widgets.file" />',
+            'name="form.widgets.file"',
             html,
         )  # noqa: E501
 
@@ -309,15 +306,15 @@ class TestDecisionFieldEditForm(unittest.TestCase):
         view = api.content.get_view("field_edit_form", item, self.request)
         html = view()
         self.assertIn(
-            u'<input id="form-widgets-title" name="form.widgets.title" class="text-widget textline-field" value="I have a secret file!" type="text" />',
+            u'value="I have a secret file!" type="text" />',
             html,
         )  # noqa: E501
         self.assertIn(
-            u'<textarea id="form-widgets-description" name="form.widgets.description" class="textarea-widget text-field">The description</textarea>',
+            u'>The description</textarea>',
             html,
         )  # noqa: E501
         self.assertNotIn(
-            '<input type="file" id="form-widgets-file-input" name="form.widgets.file" />',
+            'name="form.widgets.file"',
             html,
         )  # noqa: E501
 
@@ -341,15 +338,15 @@ class TestDecisionFieldEditForm(unittest.TestCase):
         view = api.content.get_view("field_edit_form", item, self.request)
         html = view()
         self.assertNotIn(
-            u'<input id="form-widgets-title" name="form.widgets.title" class="text-widget textline-field" value="I have a secret file!" type="text" />',
+            u'value="I have a secret file!"',
             html,
         )  # noqa: E501
         self.assertIn(
-            u'<textarea id="form-widgets-description" name="form.widgets.description" class="textarea-widget text-field">The description</textarea>',
+            u'>The description</textarea>',
             html,
         )  # noqa: E501
         self.assertNotIn(
-            '<input type="file" id="form-widgets-file-input" name="form.widgets.file" />',
+            'name="form.widgets.file"',
             html,
         )  # noqa: E501
 
@@ -398,7 +395,7 @@ class TestFieldEditFormFunctional(unittest.TestCase):
         ).value = "<p>Warum?</p>"  # noqa: E501
         self.browser.getControl(name="form.buttons.save").click()
         self.assertEqual(self.doc.title, u"Was ist das?")
-        self.assertEqual(self.doc.text.output, u"<p>Warum?</p>")
+        self.assertEqual(self.doc.text.raw, u"<p>Warum?</p>")
 
         self.browser.open(
             doc_url
@@ -406,7 +403,7 @@ class TestFieldEditFormFunctional(unittest.TestCase):
         )  # noqa: E501
         with self.assertRaises(LookupError):
             self.browser.getControl(name="form.widgets.IRichTextBehavior.text")
-        self.assertIn("<p>Warum?", self.browser.contents)
+        self.assertIn("Warum?", self.browser.contents)
         self.assertIn(
             'data-fieldname="form.widgets.IRichTextBehavior.text"',
             self.browser.contents,
@@ -446,7 +443,7 @@ class TestFieldEditFormFunctional(unittest.TestCase):
         ).value = "<p>Warum?</p>"  # noqa: E501
         self.browser.getControl(name="form.buttons.save").click()
         self.assertIn(
-            '<div class="error">Required input is missing.</div>', self.browser.contents
+            '>Required input is missing.<', self.browser.contents
         )  # noqa: E501
         self.assertEqual(
             self.browser.url, "http://nohost/plone/welcome_page/@@field_edit_form"
@@ -457,7 +454,7 @@ class TestFieldEditFormFunctional(unittest.TestCase):
         ).value = ""  # noqa: E501
         self.browser.getControl(name="form.buttons.save").click()
         self.assertIn(
-            '<div class="error">Required input is missing.</div>', self.browser.contents
+            '>Required input is missing.<', self.browser.contents
         )  # noqa: E501
         self.assertEqual(
             self.browser.url, "http://nohost/plone/welcome_page/@@field_edit_form"
@@ -468,4 +465,4 @@ class TestFieldEditFormFunctional(unittest.TestCase):
         ).value = "äöü"  # noqa: E501
         self.browser.getControl(name="form.buttons.save").click()
         self.assertEqual(self.doc.title, u"äöü")
-        self.assertEqual(self.doc.text.output, u"<p>Warum?</p>")
+        self.assertEqual(self.doc.text.raw, u"<p>Warum?</p>")
