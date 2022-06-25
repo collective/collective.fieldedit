@@ -107,7 +107,7 @@ Behavior-fields need to be prefixed with the Behavior:
 Supported Versions
 ------------------
 
-collective.fieldedit is tested in Plone 5.0, 5.1, 5.2 and 6.
+collective.fieldedit is tested in Plone 5.1, 5.2 and 6.
 
 
 Installation
