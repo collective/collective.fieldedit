@@ -104,6 +104,12 @@ Behavior-fields need to be prefixed with the Behavior:
     </a>
 
 
+Supported Versions
+------------------
+
+collective.fieldedit is tested in Plone 5.0, 5.1, 5.2 and 6.
+
+
 Installation
 ------------
 
@@ -119,6 +125,7 @@ Install collective.fieldedit by adding it to your buildout::
 
 and then running ``bin/buildout``
 
+Then got to the add-on controlpanel (``/prefs_install_products_form``) to enable it.
 
 Contribute
 ----------

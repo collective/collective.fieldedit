@@ -5,11 +5,14 @@ Changelog
 1.0a3 (unreleased)
 ------------------
 
-- Additional Markup for Plone 6.0 (Bootstrap 5) [jensens]
+- Additional Markup for Plone 6.0 (Bootstrap 5)
+  [jensens]
 
 - Formatted with Black/isort according to Plone standards.
   [jensens]
 
+- Add support for Python 3, Plone 5.2 and 6.
+  [pbauer]
 
 1.0a2 (2018-08-04)
 ------------------
