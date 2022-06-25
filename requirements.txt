@@ -1,2 +1,6 @@
-zc.buildout==2.13.3
-setuptools==42.0.2
+# For Buildout related packages, it is easiest to keep them at the same version for all environments.
+# Keep these in sync with base.cfg please:
+setuptools==44.1.1
+zc.buildout==3.0.0rc1
+wheel==0.37.1
+pip==20.3.4
