@@ -388,7 +388,7 @@ class TestFieldEditFormFunctional(unittest.TestCase):
         self.doc.subject = (u"Krazy Keyword",)
         self.browser.open(
             doc_url
-            + "/@@field_edit_form?fields=IDublinCore.title&fields={}.text&autofocus=True".format(RICHTEXT)
+            + "/@@field_edit_form?fields=IDublinCore.title&fields={}.text&autofocus=True".format(RICHTEXT)  # noqa W503
         )  # noqa: E501
         self.assertEqual(
             self.browser.getControl(
@@ -408,7 +408,7 @@ class TestFieldEditFormFunctional(unittest.TestCase):
 
         self.browser.open(
             doc_url
-            + "/@@field_edit_form?fields={}.text:display&fields=IDublinCore.description".format(RICHTEXT)
+            + "/@@field_edit_form?fields={}.text:display&fields=IDublinCore.description".format(RICHTEXT)  # noqa W503
         )  # noqa: E501
         with self.assertRaises(LookupError):
             self.browser.getControl(name="form.widgets.{}.text".format(RICHTEXT))
@@ -436,7 +436,7 @@ class TestFieldEditFormFunctional(unittest.TestCase):
         self.doc.subject = (u"Krazy Keyword",)
         self.browser.open(
             doc_url
-            + "/@@field_edit_form?fields=IDublinCore.title&fields={}.text".format(RICHTEXT)
+            + "/@@field_edit_form?fields=IDublinCore.title&fields={}.text".format(RICHTEXT) # noqa W503
         )  # noqa: E501
         self.assertEqual(
             self.browser.getControl(

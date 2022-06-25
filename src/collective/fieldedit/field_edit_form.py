@@ -123,7 +123,7 @@ class FieldEditForm(edit.DefaultEditForm):
                     interfaces.INPUT_MODE,
                     interfaces.HIDDEN_MODE,
                 ]
-                and not check_write_permission(self.context, fieldname)
+                and not check_write_permission(self.context, fieldname)  # noqa W503
             ):
                 # skip if edit- or hidden-mode and cannot write
                 return
