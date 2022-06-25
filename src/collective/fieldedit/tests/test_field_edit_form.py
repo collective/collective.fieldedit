@@ -20,6 +20,15 @@ import transaction
 import unittest
 
 
+try:
+    from Products.CMFPlone.factory import PLONE52MARKER  # noqa: F401
+
+    RICHTEXT = "IRichTextBehavior"
+except ImportError:
+    # before Plone 5.2:
+    RICHTEXT = "IRichText"
+
+
 class TestFieldEditForm(unittest.TestCase):
 
     layer = COLLECTIVE_FIELDEDIT_INTEGRATION_TESTING
@@ -39,8 +48,8 @@ class TestFieldEditForm(unittest.TestCase):
     def test_get_widget_markup(self):
         view = api.content.get_view("field_edit_form", self.doc, self.request)
         view.update()
-        html = view.get_widget(fieldname="IRichTextBehavior.text")
-        self.assertIn(' name="form.widgets.IRichTextBehavior.text"', html)
+        html = view.get_widget(fieldname="{}.text".format(RICHTEXT))
+        self.assertIn(' name="form.widgets.{}.text"'.format(RICHTEXT), html)
 
     def test_get_widget_markup_display(self):
         view = api.content.get_view("field_edit_form", self.doc, self.request)
@@ -379,7 +388,7 @@ class TestFieldEditFormFunctional(unittest.TestCase):
         self.doc.subject = (u"Krazy Keyword",)
         self.browser.open(
             doc_url
-            + "/@@field_edit_form?fields=IDublinCore.title&fields=IRichTextBehavior.text&autofocus=True"
+            + "/@@field_edit_form?fields=IDublinCore.title&fields={}.text&autofocus=True".format(RICHTEXT)
         )  # noqa: E501
         self.assertEqual(
             self.browser.getControl(
@@ -391,7 +400,7 @@ class TestFieldEditFormFunctional(unittest.TestCase):
             name="form.widgets.IDublinCore.title"
         ).value = "Was ist das?"  # noqa: E501
         self.browser.getControl(
-            name="form.widgets.IRichTextBehavior.text"
+            name="form.widgets.{}.text".format(RICHTEXT)
         ).value = "<p>Warum?</p>"  # noqa: E501
         self.browser.getControl(name="form.buttons.save").click()
         self.assertEqual(self.doc.title, u"Was ist das?")
@@ -399,13 +408,13 @@ class TestFieldEditFormFunctional(unittest.TestCase):
 
         self.browser.open(
             doc_url
-            + "/@@field_edit_form?fields=IRichTextBehavior.text:display&fields=IDublinCore.description"
+            + "/@@field_edit_form?fields={}.text:display&fields=IDublinCore.description".format(RICHTEXT)
         )  # noqa: E501
         with self.assertRaises(LookupError):
-            self.browser.getControl(name="form.widgets.IRichTextBehavior.text")
+            self.browser.getControl(name="form.widgets.{}.text".format(RICHTEXT))
         self.assertIn("Warum?", self.browser.contents)
         self.assertIn(
-            'data-fieldname="form.widgets.IRichTextBehavior.text"',
+            'data-fieldname="form.widgets.{}.text"'.format(RICHTEXT),
             self.browser.contents,
         )
 
@@ -427,7 +436,7 @@ class TestFieldEditFormFunctional(unittest.TestCase):
         self.doc.subject = (u"Krazy Keyword",)
         self.browser.open(
             doc_url
-            + "/@@field_edit_form?fields=IDublinCore.title&fields=IRichTextBehavior.text"
+            + "/@@field_edit_form?fields=IDublinCore.title&fields={}.text".format(RICHTEXT)
         )  # noqa: E501
         self.assertEqual(
             self.browser.getControl(
@@ -439,7 +448,7 @@ class TestFieldEditFormFunctional(unittest.TestCase):
             name="form.widgets.IDublinCore.title"
         ).value = ""  # noqa: E501
         self.browser.getControl(
-            name="form.widgets.IRichTextBehavior.text"
+            name="form.widgets.{}.text".format(RICHTEXT)
         ).value = "<p>Warum?</p>"  # noqa: E501
         self.browser.getControl(name="form.buttons.save").click()
         self.assertIn(

@@ -2,11 +2,19 @@
    If you want to learn more about writing documentation, please check out: http://docs.plone.org/about/documentation_styleguide.html
    This text does not appear on pypi or github. It is a comment.
 
-.. image:: https://travis-ci.org/collective/collective.fieldedit.svg?branch=master
-    :target: https://travis-ci.org/collective/collective.fieldedit
+.. image:: https://img.shields.io/pypi/v/collective.fieldedit.svg
+    :target: https://pypi.python.org/pypi/collective.fieldedit/
+    :alt: Latest Version
 
-.. image:: https://coveralls.io/repos/github/collective/collective.fieldedit/badge.svg?branch=master
-    :target: https://coveralls.io/github/collective/collective.fieldedit?branch=master
+.. image:: https://img.shields.io/pypi/status/collective.fieldedit.svg
+    :target: https://pypi.python.org/pypi/collective.fieldedit
+    :alt: Egg Status
+
+.. image:: https://img.shields.io/pypi/pyversions/collective.fieldedit.svg?style=plastic   :alt: Supported - Python Versions
+
+.. image:: https://img.shields.io/pypi/l/collective.fieldedit.svg
+    :target: https://pypi.python.org/pypi/collective.fieldedit/
+    :alt: License
 
 
 ====================
@@ -48,11 +56,10 @@ Render a link to edit the title in a modal:
 
 .. code-block::
 
-    <a href="${python:context.absolute_url()}/field_edit_form?fields=IBasic.title"
+    <a href="${python:context.absolute_url()}/field_edit_form?fields=IDublinCore.title"
        class="pat-plone-modal"
-       data-pat-plone-modal='{"actionOptions": {"reloadWindowOnClose": false, "redirectOnResponse": true},
-                              "buttons": ".formControls > button",
-                              "content": "#content-core"}'>
+       data-pat-plone-modal='{"actionOptions": {"reloadWindowOnClose": false, "redirectOnResponse": true, "disableAjaxFormSubmit": true},
+                              "buttons": ".formControls > button"'>
         Edit the Title in a modal
     </a>
 
