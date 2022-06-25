@@ -56,10 +56,3 @@ jobs:
           ${{ runner.os }}-eggs-${{ matrix.config[0] }}-
     - name: Test
       run: tox -e ${{ matrix.config[1] }}
-    - name: Coverage:
-      run: |
-        bin/createcoverage
-        bin/pip install coverage
-        bin/python -m coverage.pickle2json
-        pip install coveralls
-        coveralls
