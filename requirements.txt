@@ -2,5 +2,5 @@
 # Keep these in sync with base.cfg please:
 setuptools==44.1.1
 zc.buildout==3.0.0rc1
-wheel==0.37.1
+wheel==0.38.1
 pip==21.1
